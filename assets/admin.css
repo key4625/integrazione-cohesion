@@ -1,0 +1,229 @@
+/* Cohesion Admin Styles */
+
+.cohesion-help-section {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.cohesion-help-section h4 {
+    margin-top: 0;
+    color: #0073aa;
+}
+
+.cohesion-help-section ul, 
+.cohesion-help-section ol {
+    margin-left: 20px;
+}
+
+.cohesion-test-section {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.cohesion-test-section h3 {
+    margin-top: 0;
+    color: #0073aa;
+}
+
+.cohesion-test-section .button {
+    margin-right: 10px;
+}
+
+/* Form styling */
+.form-table th {
+    width: 200px;
+}
+
+.form-table td input[type="text"],
+.form-table td input[type="url"],
+.form-table td select {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-table td .description {
+    margin-top: 5px;
+    font-style: italic;
+    color: #666;
+}
+
+/* Tab styling */
+.nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+/* Table styling for users and logs */
+.wp-list-table th,
+.wp-list-table td {
+    vertical-align: top;
+}
+
+.wp-list-table .button-small {
+    font-size: 11px;
+    height: auto;
+    line-height: 16px;
+    padding: 2px 6px;
+}
+
+/* Status indicators */
+.cohesion-status-ok {
+    color: #46b450;
+    font-weight: bold;
+}
+
+.cohesion-status-error {
+    color: #dc3232;
+    font-weight: bold;
+}
+
+.cohesion-status-warning {
+    color: #ffb900;
+    font-weight: bold;
+}
+
+/* Configuration sections */
+.cohesion-config-section {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px 0;
+    padding: 0;
+}
+
+.cohesion-config-section h3 {
+    background: #0073aa;
+    color: white;
+    margin: 0;
+    padding: 15px 20px;
+    border-radius: 5px 5px 0 0;
+}
+
+.cohesion-config-section .inside {
+    padding: 20px;
+}
+
+/* Responsive design */
+@media screen and (max-width: 782px) {
+    .form-table td input[type="text"],
+    .form-table td input[type="url"],
+    .form-table td select {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .cohesion-test-section .button {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+/* Notices */
+.cohesion-notice {
+    border-left: 4px solid #0073aa;
+    background: #f0f8ff;
+    padding: 12px;
+    margin: 20px 0;
+}
+
+.cohesion-notice.error {
+    border-left-color: #dc3232;
+    background: #fff5f5;
+}
+
+.cohesion-notice.success {
+    border-left-color: #46b450;
+    background: #f0fff4;
+}
+
+.cohesion-notice.warning {
+    border-left-color: #ffb900;
+    background: #fffbf0;
+}
+
+/* Login button styling */
+.cohesion-login-widget {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.cohesion-login-button {
+    background: #0073aa;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.cohesion-login-button:hover {
+    background: #005a87;
+    color: white;
+    text-decoration: none;
+}
+
+.cohesion-logout-widget {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.cohesion-logout-button {
+    background: #dc3232;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.cohesion-logout-button:hover {
+    background: #a82727;
+    color: white;
+    text-decoration: none;
+}
+
+.cohesion-spid-info {
+    margin: 10px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Loading states */
+.cohesion-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.cohesion-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: cohesion-spin 1s linear infinite;
+}
+
+@keyframes cohesion-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

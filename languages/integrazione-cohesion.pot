@@ -1,0 +1,347 @@
+# Integrazione Cohesion - Language Template
+# Copyright (C) 2025 Sistema Cohesion
+# This file is distributed under the same license as the Integrazione Cohesion package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Integrazione Cohesion 1.0.0\n"
+"Report-Msgid-Bugs-To: integrazioneCohesion@regione.marche.it\n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Integrazione Cohesion"
+msgstr ""
+
+msgid "Plugin per l'integrazione del sistema di autenticazione Cohesion della Regione Marche con WordPress."
+msgstr ""
+
+msgid "Login con Cohesion"
+msgstr ""
+
+msgid "Logout (%s)"
+msgstr ""
+
+msgid "Accedi con Cohesion"
+msgstr ""
+
+msgid "Sei già autenticato."
+msgstr ""
+
+msgid "Supporta SPID, CIE e altri sistemi di identità digitale"
+msgstr ""
+
+msgid "Non sei autenticato."
+msgstr ""
+
+msgid "Benvenuto, %s"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Accesso con Identità Digitale"
+msgstr ""
+
+msgid "Supporta SPID, CIE, eIDAS e sistemi di autenticazione della Regione Marche"
+msgstr ""
+
+msgid "Sistema di autenticazione certificato"
+msgstr ""
+
+msgid "OPPURE"
+msgstr ""
+
+msgid "Errore durante l'inizializzazione del login: %s"
+msgstr ""
+
+msgid "Errore durante l'autenticazione: %s"
+msgstr ""
+
+msgid "Autenticazione fallita"
+msgstr ""
+
+msgid "Profilo utente non disponibile"
+msgstr ""
+
+msgid "Errore nella creazione dell'utente: %s"
+msgstr ""
+
+msgid "La creazione automatica degli utenti è disabilitata."
+msgstr ""
+
+msgid "Dati utente insufficienti per la creazione dell'account."
+msgstr ""
+
+msgid "Un utente con questa email esiste già."
+msgstr ""
+
+msgid "Configurazione Base"
+msgstr ""
+
+msgid "Configurazione di base per l'integrazione con Cohesion."
+msgstr ""
+
+msgid "Metodi di Autenticazione"
+msgstr ""
+
+msgid "Configura i metodi di autenticazione disponibili."
+msgstr ""
+
+msgid "Gestione Utenti"
+msgstr ""
+
+msgid "Configura come vengono gestiti gli utenti autenticati tramite Cohesion."
+msgstr ""
+
+msgid "ID Sito Cohesion"
+msgstr ""
+
+msgid "ID sito fornito dalla Regione Marche. Utilizzare \"TEST\" per l'ambiente di test."
+msgstr ""
+
+msgid "Abilita SAML 2.0"
+msgstr ""
+
+msgid "Abilita SAML 2.0 (richiesto per SPID, CIE, eIDAS)"
+msgstr ""
+
+msgid "Restrizioni Autenticazione"
+msgstr ""
+
+msgid "Restrizioni sui metodi di autenticazione (0=User/Pass, 1=User/Pass/PIN, 2=Smart Card, 3=Dominio). Separare con virgole."
+msgstr ""
+
+msgid "Abilita SPID"
+msgstr ""
+
+msgid "Abilita autenticazione SPID"
+msgstr ""
+
+msgid "Abilita CIE"
+msgstr ""
+
+msgid "Abilita autenticazione CIE (Carta d'Identità Elettronica)"
+msgstr ""
+
+msgid "Abilita eIDAS"
+msgstr ""
+
+msgid "Abilita autenticazione eIDAS (identità digitali europee)"
+msgstr ""
+
+msgid "Abilita SPID Professionale"
+msgstr ""
+
+msgid "Creazione Automatica Utenti"
+msgstr ""
+
+msgid "Crea automaticamente gli utenti WordPress per i nuovi utenti Cohesion"
+msgstr ""
+
+msgid "Ruolo Predefinito"
+msgstr ""
+
+msgid "Ruolo assegnato ai nuovi utenti creati automaticamente."
+msgstr ""
+
+msgid "Invia Email di Benvenuto"
+msgstr ""
+
+msgid "Invia email di benvenuto ai nuovi utenti"
+msgstr ""
+
+msgid "Dominio Email Fallback"
+msgstr ""
+
+msgid "Dominio utilizzato per generare email temporanee per utenti senza email."
+msgstr ""
+
+msgid "Redirect dopo Login"
+msgstr ""
+
+msgid "URL di destinazione dopo il login (lasciare vuoto per homepage)."
+msgstr ""
+
+msgid "Redirect dopo Logout"
+msgstr ""
+
+msgid "URL di destinazione dopo il logout (lasciare vuoto per homepage)."
+msgstr ""
+
+msgid "Impostazioni"
+msgstr ""
+
+msgid "Utenti Cohesion"
+msgstr ""
+
+msgid "Log Accessi"
+msgstr ""
+
+msgid "Aiuto"
+msgstr ""
+
+msgid "Test Integrazione"
+msgstr ""
+
+msgid "Utilizza questi link per testare l'integrazione:"
+msgstr ""
+
+msgid "Test Login"
+msgstr ""
+
+msgid "Test Logout"
+msgstr ""
+
+msgid "Utenti autenticati tramite Cohesion"
+msgstr ""
+
+msgid "Nessun utente autenticato tramite Cohesion trovato."
+msgstr ""
+
+msgid "Utente"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Codice Fiscale"
+msgstr ""
+
+msgid "Ultimo Login"
+msgstr ""
+
+msgid "Tipo Auth"
+msgstr ""
+
+msgid "Azioni"
+msgstr ""
+
+msgid "Modifica"
+msgstr ""
+
+msgid "Log degli accessi Cohesion"
+msgstr ""
+
+msgid "Nessun log di accesso disponibile."
+msgstr ""
+
+msgid "Data/Ora"
+msgstr ""
+
+msgid "IP"
+msgstr ""
+
+msgid "User Agent"
+msgstr ""
+
+msgid "Cancella tutti i log"
+msgstr ""
+
+msgid "Sei sicuro di voler cancellare tutti i log?"
+msgstr ""
+
+msgid "Log cancellati con successo."
+msgstr ""
+
+msgid "Aiuto e Documentazione"
+msgstr ""
+
+msgid "Configurazione Iniziale"
+msgstr ""
+
+msgid "Richiedere l'integrazione a Cohesion tramite il portale della Regione Marche"
+msgstr ""
+
+msgid "Ottenere l'ID Sito univoco dalla Regione Marche"
+msgstr ""
+
+msgid "Inserire l'ID Sito nella configurazione del plugin"
+msgstr ""
+
+msgid "Configurare i metodi di autenticazione desiderati"
+msgstr ""
+
+msgid "Testare l'integrazione utilizzando i link di test"
+msgstr ""
+
+msgid "Shortcode Disponibili"
+msgstr ""
+
+msgid "Mostra il pulsante di login Cohesion"
+msgstr ""
+
+msgid "Mostra il pulsante di logout per utenti autenticati"
+msgstr ""
+
+msgid "Parametri shortcode login:"
+msgstr ""
+
+msgid "Testo del pulsante"
+msgstr ""
+
+msgid "URL di destinazione dopo il login"
+msgstr ""
+
+msgid "Mostra informazioni SPID (true/false)"
+msgstr ""
+
+msgid "URL Endpoint"
+msgstr ""
+
+msgid "Supporto"
+msgstr ""
+
+msgid "Per supporto tecnico sull'integrazione Cohesion:"
+msgstr ""
+
+msgid "Email:"
+msgstr ""
+
+msgid "Documentazione:"
+msgstr ""
+
+msgid "Requisiti Sistema"
+msgstr ""
+
+msgid "Attenzione:"
+msgstr ""
+
+msgid "Stai utilizzando l'ID Sito \"TEST\" di Cohesion. Per utilizzare il plugin in produzione, devi richiedere un ID Sito ufficiale alla Regione Marche e configurarlo nelle impostazioni del plugin."
+msgstr ""
+
+msgid "Configura ora"
+msgstr ""
+
+msgid "PHP 7.4 o superiore richiesto. Versione attuale: %s"
+msgstr ""
+
+msgid "La direttiva allow_url_fopen deve essere abilitata nel php.ini"
+msgstr ""
+
+msgid "Estensione PHP richiesta: %s"
+msgstr ""
+
+msgid "Le sessioni PHP sono disabilitate"
+msgstr ""
+
+msgid "Errore di attivazione plugin"
+msgstr ""
+
+msgid "Il plugin Integrazione Cohesion non può essere attivato per i seguenti motivi:"
+msgstr ""
+
+msgid "Torna ai plugin"
+msgstr ""
+
+msgid "Libreria Cohesion mancante"
+msgstr ""
+
+msgid "La libreria Cohesion2 non è stata trovata. Installa le dipendenze con:"
+msgstr ""
+
+msgid "Oppure scarica manualmente la libreria da GitHub e inseriscila nella cartella lib/cohesion2/"
+msgstr ""
