@@ -23,8 +23,8 @@ class CohesionIntegration {
         // Handle Cohesion authentication callback
         add_action('template_redirect', array($this, 'handle_cohesion_callback'));
         
-        // Add rewrite rules for Cohesion endpoints
-        add_action('init', array($this, 'add_rewrite_rules'));
+        // Add rewrite rules for Cohesion endpoints (early priority)
+        add_action('init', array($this, 'add_rewrite_rules'), 1);
         
         // Handle query vars
         add_filter('query_vars', array($this, 'add_query_vars'));
@@ -43,6 +43,11 @@ class CohesionIntegration {
     
     /**
      * Add rewrite rules for Cohesion endpoints
+     * 
+     * Creates custom URL endpoints:
+     * - /cohesion/login - Initiates Cohesion authentication
+     * - /cohesion/logout - Handles Cohesion logout
+     * - /cohesion/callback - Handles authentication callback
      */
     public function add_rewrite_rules() {
         add_rewrite_rule(
@@ -62,6 +67,24 @@ class CohesionIntegration {
             'index.php?cohesion_action=callback',
             'top'
         );
+        
+        // Check if we need to flush rewrite rules
+        $this->maybe_flush_rewrite_rules();
+    }
+    
+    /**
+     * Check if rewrite rules need to be flushed
+     * 
+     * This ensures that rewrite rules are updated when the plugin version changes,
+     * preventing issues with cached rewrite rules.
+     */
+    private function maybe_flush_rewrite_rules() {
+        $version = get_option('cohesion_rewrite_rules_version', '0');
+        
+        if (version_compare($version, COHESION_PLUGIN_VERSION, '<')) {
+            flush_rewrite_rules();
+            update_option('cohesion_rewrite_rules_version', COHESION_PLUGIN_VERSION);
+        }
     }
     
     /**
@@ -78,18 +101,27 @@ class CohesionIntegration {
     public function handle_cohesion_callback() {
         $action = get_query_var('cohesion_action');
         
-        switch ($action) {
-            case 'login':
-                $this->handle_login();
-                break;
-                
-            case 'logout':
-                $this->handle_logout();
-                break;
-                
-            case 'callback':
-                $this->handle_authentication_callback();
-                break;
+        if (!empty($action)) {
+            switch ($action) {
+                case 'login':
+                    $this->handle_login();
+                    break;
+                    
+                case 'logout':
+                    $this->handle_logout();
+                    break;
+                    
+                case 'callback':
+                    $this->handle_authentication_callback();
+                    break;
+                    
+                default:
+                    // Unknown action, let WordPress handle it normally
+                    return;
+            }
+            
+            // Exit after handling the action to prevent normal template loading
+            exit;
         }
     }
     

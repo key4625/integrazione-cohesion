@@ -132,13 +132,13 @@ class CohesionConfig {
         // Check if autoloader is available
         if (file_exists(COHESION_PLUGIN_PATH . 'vendor/autoload.php')) {
             require_once COHESION_PLUGIN_PATH . 'vendor/autoload.php';
-            return class_exists('\andreaval\Cohesion2\Cohesion2');
+            return class_exists('Cohesion2');
         }
         
         // Check if manual installation is available
         if (file_exists(COHESION_PLUGIN_PATH . 'lib/cohesion2/Cohesion2.php')) {
             require_once COHESION_PLUGIN_PATH . 'lib/cohesion2/Cohesion2.php';
-            return class_exists('\andreaval\Cohesion2\Cohesion2');
+            return class_exists('Cohesion2');
         }
         
         return false;

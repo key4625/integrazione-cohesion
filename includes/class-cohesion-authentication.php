@@ -29,7 +29,7 @@ class CohesionAuthentication {
     public function initiate_login() {
         try {
             // Initialize Cohesion
-            $this->cohesion = new \andreaval\Cohesion2\Cohesion2('wordpress_cohesion');
+            $this->cohesion = new Cohesion2('wordpress_cohesion');
             
             // Configure based on plugin settings
             $this->configure_cohesion();
@@ -102,7 +102,7 @@ class CohesionAuthentication {
      */
     private function process_authentication() {
         // Initialize Cohesion
-        $this->cohesion = new \andreaval\Cohesion2\Cohesion2('wordpress_cohesion');
+        $this->cohesion = new Cohesion2('wordpress_cohesion');
         $this->configure_cohesion();
         
         // Process authentication
@@ -176,7 +176,7 @@ class CohesionAuthentication {
             
             if ($cohesion_auth && is_user_logged_in()) {
                 // User was authenticated via Cohesion, perform Cohesion logout
-                $this->cohesion = new \andreaval\Cohesion2\Cohesion2('wordpress_cohesion');
+                $this->cohesion = new Cohesion2('wordpress_cohesion');
                 $this->configure_cohesion();
                 
                 // Clear WordPress session
