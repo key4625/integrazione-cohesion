@@ -1,289 +1,418 @@
 <?php
+/**
+ * Gestione dell'autenticazione Cohesion
+ *
+ * @package IntegrazioneCohesion
+ */
 
+// Previeni accesso diretto
 if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Cohesion Authentication Handler
- */
-class CohesionAuthentication {
+class Cohesion_Authentication {
     
-    private $cohesion;
+    private $config;
+    private $user_manager;
     
     public function __construct() {
-        // Load Cohesion library
-        if (file_exists(COHESION_PLUGIN_PATH . 'vendor/autoload.php')) {
-            require_once COHESION_PLUGIN_PATH . 'vendor/autoload.php';
-        } else {
-            // Fallback: include the library directly if composer is not available
-            if (file_exists(COHESION_PLUGIN_PATH . 'lib/cohesion2/Cohesion2.php')) {
-                require_once COHESION_PLUGIN_PATH . 'lib/cohesion2/Cohesion2.php';
-            }
-        }
+        $this->config = new Cohesion_Config();
+        $this->user_manager = new Cohesion_User_Manager();
+        
+        // Hook per l'inizializzazione AJAX
+        add_action('wp_ajax_cohesion_login', array($this, 'handle_ajax_login'));
+        add_action('wp_ajax_nopriv_cohesion_login', array($this, 'handle_ajax_login'));
+        
+        // Hook per il callback di ritorno da Cohesion
+        add_action('wp_ajax_cohesion_callback', array($this, 'handle_callback'));
+        add_action('wp_ajax_nopriv_cohesion_callback', array($this, 'handle_callback'));
+        
+        // Hook per il logout
+        add_action('wp_ajax_cohesion_logout', array($this, 'handle_logout'));
+        add_action('wp_ajax_nopriv_cohesion_logout', array($this, 'handle_logout'));
     }
     
     /**
-     * Initiate login process
+     * Gestisce la richiesta AJAX di login
      */
-    public function initiate_login() {
+    public function handle_ajax_login() {
         try {
-            // Initialize Cohesion
-            $this->cohesion = new Cohesion2('wordpress_cohesion');
+            // Verifica nonce per sicurezza
+            if (!wp_verify_nonce($_POST['nonce'], 'cohesion_login_nonce')) {
+                throw new Exception('Nonce verification failed');
+            }
             
-            // Configure based on plugin settings
-            $this->configure_cohesion();
+            // Log per debug
+            error_log('Cohesion Login: Starting login process');
             
-            // Store redirect URL in session
-            $redirect_to = isset($_GET['redirect_to']) ? $_GET['redirect_to'] : get_option('cohesion_redirect_after_login', home_url());
-            $_SESSION['cohesion_redirect_after_login'] = $redirect_to;
+            // Avvia la sessione se non già attiva
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
             
-            // Start authentication
-            $this->cohesion->auth();
+            // Includi l'autoloader di Composer
+            $autoload_path = plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php';
+            if (!file_exists($autoload_path)) {
+                throw new Exception('Autoloader Composer non trovato: ' . $autoload_path);
+            }
+            require_once $autoload_path;
             
-        } catch (\Exception $e) {
-            $this->handle_error('Errore durante l\'inizializzazione del login: ' . $e->getMessage());
+            // Verifica che la classe Cohesion2 sia disponibile
+            if (!class_exists('Cohesion2')) {
+                throw new Exception('Classe Cohesion2 non trovata');
+            }
+            
+            // Inizializza Cohesion2
+            $cohesion = new Cohesion2();
+            
+            // Configura i parametri
+            $config = $this->config->get_all_settings();
+            
+            // Configura la libreria Cohesion2
+            if (!empty($config['cohesion_certificate_path'])) {
+                $cohesion->setCertificate($config['cohesion_certificate_path'], $config['cohesion_key_path']);
+            }
+            
+            // Configura SSO e SAML2.0
+            $cohesion->useSSO(true);
+            if ($config['cohesion_use_saml20']) {
+                $cohesion->useSAML20(true);
+            }
+            
+            // Configura restrizioni di autenticazione
+            if (!empty($config['cohesion_auth_restriction'])) {
+                $cohesion->setAuthRestriction($config['cohesion_auth_restriction']);
+            }
+            
+            error_log('Cohesion Login: Config = ' . print_r($config, true));
+            
+            // La libreria Cohesion2 gestisce il redirect automaticamente
+            // Non restituisce un URL ma fa il redirect direttamente
+            $cohesion->auth();
+            
+            // Se arriviamo qui, significa che l'utente è già autenticato
+            error_log('Cohesion Login: User already authenticated');
+            
+            wp_send_json_success(array(
+                'message' => 'Utente già autenticato',
+                'redirect_url' => admin_url()
+            ));
+            
+        } catch (Exception $e) {
+            error_log('Cohesion Login Error: ' . $e->getMessage());
+            error_log('Cohesion Login Stack Trace: ' . $e->getTraceAsString());
+            
+            wp_send_json_error(array(
+                'message' => 'Errore durante l\'inizializzazione del login: ' . $e->getMessage(),
+                'debug_info' => array(
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'autoload_path' => $autoload_path ?? 'N/A',
+                    'autoload_exists' => file_exists(plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php'),
+                    'cohesion2_exists' => class_exists('Cohesion2', false),
+                    'cohesion2_file' => plugin_dir_path(dirname(__FILE__)) . 'vendor/andreaval/cohesion2-library/cohesion2/Cohesion2.php',
+                    'cohesion2_file_exists' => file_exists(plugin_dir_path(dirname(__FILE__)) . 'vendor/andreaval/cohesion2-library/cohesion2/Cohesion2.php'),
+                    'session_status' => session_status(),
+                    'php_version' => PHP_VERSION,
+                    'composer_autoload' => file_exists(plugin_dir_path(dirname(__FILE__)) . 'vendor/composer/autoload_classmap.php') ? 'Present' : 'Missing'
+                )
+            ));
         }
+        
+        wp_die();
     }
     
     /**
-     * Configure Cohesion based on plugin settings
-     */
-    private function configure_cohesion() {
-        // Set ID Sito
-        $id_sito = get_option('cohesion_id_sito', 'TEST');
-        // Note: The library doesn't have a public method to set ID_SITO, 
-        // this would need to be configured in the library itself
-        
-        // Enable SAML 2.0 if configured
-        if (get_option('cohesion_enable_saml20', true)) {
-            $this->cohesion->useSAML20(true);
-            
-            // Enable eIDAS if configured
-            if (get_option('cohesion_enable_eidas', false)) {
-                $this->cohesion->enableEIDASLogin();
-            }
-            
-            // Enable SPID Professional if configured
-            if (get_option('cohesion_enable_spid_pro', false)) {
-                $purposes = get_option('cohesion_spid_pro_purposes', array('PF'));
-                $this->cohesion->enableSPIDProLogin($purposes);
-            }
-        }
-        
-        // Set authentication restrictions
-        $auth_restriction = get_option('cohesion_auth_restriction', '0,1,2,3');
-        if (!empty($auth_restriction)) {
-            $this->cohesion->setAuthRestriction($auth_restriction);
-        }
-    }
-    
-    /**
-     * Handle authentication callback
+     * Gestisce il callback di ritorno da Cohesion
+     * Con la libreria Cohesion2, il callback viene gestito automaticamente dal metodo auth()
      */
     public function handle_callback() {
         try {
-            // Check if we have an auth parameter (callback from Cohesion)
-            if (isset($_GET['auth']) || isset($_POST['auth'])) {
-                $this->process_authentication();
-            } else {
-                // No auth parameter, redirect to login
-                wp_redirect(wp_login_url());
-                exit;
+            error_log('Cohesion Callback: Starting callback handling');
+            error_log('Cohesion Callback: GET data = ' . print_r($_GET, true));
+            error_log('Cohesion Callback: POST data = ' . print_r($_POST, true));
+            
+            // Avvia la sessione se non già attiva
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
             }
             
-        } catch (\Exception $e) {
-            $this->handle_error('Errore durante l\'autenticazione: ' . $e->getMessage());
+            // Includi l'autoloader di Composer
+            require_once plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php';
+            
+            // Inizializza Cohesion2
+            $cohesion = new Cohesion2();
+            
+            // Il metodo auth() gestisce automaticamente il callback
+            $cohesion->auth();
+            
+            // Verifica se l'utente è autenticato
+            if ($cohesion->isAuth()) {
+                error_log('Cohesion Callback: User authenticated');
+                
+                // Recupera i dati dell'utente dalla sessione Cohesion
+                $user_data = $this->extract_user_data_from_cohesion($cohesion);
+                
+                if (empty($user_data)) {
+                    throw new Exception('Nessun dato utente disponibile dalla sessione Cohesion');
+                }
+                
+                error_log('Cohesion Callback: User data = ' . print_r($user_data, true));
+                
+                // Crea o aggiorna l'utente WordPress
+                $wp_user = $this->user_manager->create_or_update_user($user_data);
+                
+                if (is_wp_error($wp_user)) {
+                    throw new Exception('Errore nella creazione utente: ' . $wp_user->get_error_message());
+                }
+                
+                // Effettua il login
+                wp_set_current_user($wp_user->ID);
+                wp_set_auth_cookie($wp_user->ID, true);
+                
+                // Redirect alla dashboard o pagina specificata
+                $redirect_url = isset($_SESSION['cohesion_redirect']) ? $_SESSION['cohesion_redirect'] : admin_url();
+                unset($_SESSION['cohesion_redirect']);
+                
+                error_log('Cohesion Callback: Login successful, redirecting to ' . $redirect_url);
+                
+                wp_redirect($redirect_url);
+                exit;
+            } else {
+                throw new Exception('Autenticazione Cohesion non riuscita');
+            }
+            
+        } catch (Exception $e) {
+            error_log('Cohesion Callback Error: ' . $e->getMessage());
+            error_log('Cohesion Callback Stack Trace: ' . $e->getTraceAsString());
+            
+            // Redirect con messaggio di errore
+            $error_url = home_url('?cohesion_error=' . urlencode($e->getMessage()));
+            wp_redirect($error_url);
+            exit;
         }
     }
     
     /**
-     * Process authentication response
+     * Estrae i dati dell'utente dalla sessione Cohesion
      */
-    private function process_authentication() {
-        // Initialize Cohesion
-        $this->cohesion = new Cohesion2('wordpress_cohesion');
-        $this->configure_cohesion();
+    private function extract_user_data_from_cohesion($cohesion) {
+        $user_data = array();
         
-        // Process authentication
-        $this->cohesion->auth();
-        
-        if ($this->cohesion->isAuth()) {
-            // Authentication successful
-            $this->handle_successful_authentication();
-        } else {
-            // Authentication failed
-            $this->handle_error('Autenticazione fallita');
+        // La libreria Cohesion2 espone i dati utente attraverso le proprietà pubbliche
+        if ($cohesion->username && $cohesion->profile) {
+            $profile = $cohesion->profile;
+            
+            // Mappa i dati dal profilo Cohesion alla struttura attesa dal user manager
+            $user_data = array(
+                'username' => $cohesion->username,
+                'user_login' => $cohesion->username,
+                'nome' => $profile['nome'] ?? '',
+                'cognome' => $profile['cognome'] ?? '',
+                'email' => $profile['email'] ?? $profile['email_certificata'] ?? '',
+                'codice_fiscale' => $profile['codice_fiscale'] ?? '',
+                'spid_code' => $profile['spid_code'] ?? '',
+                'tipo_autenticazione' => $profile['tipo_autenticazione'] ?? '',
+                'data_nascita' => $profile['data_nascita'] ?? '',
+                'localita_nascita' => $profile['localita_nascita'] ?? '',
+                'sesso' => $profile['sesso'] ?? '',
+                'telefono' => $profile['telefono'] ?? '',
+                'indirizzo_residenza' => $profile['indirizzo_residenza'] ?? '',
+                'localita_residenza' => $profile['localita_residenza'] ?? '',
+                'provincia_residenza' => $profile['provincia_residenza'] ?? '',
+                'cap_residenza' => $profile['cap_residenza'] ?? '',
+                'regione_residenza' => $profile['regione_residenza'] ?? '',
+                'nazione_residenza' => $profile['nazione_residenza'] ?? '',
+                'professione' => $profile['professione'] ?? '',
+                'settore_azienda' => $profile['settore_azienda'] ?? '',
+                'profilo_familiare' => $profile['profilo_familiare'] ?? '',
+                'full_profile' => $profile // Salva il profilo completo per reference
+            );
         }
+        
+        return $user_data;
     }
     
     /**
-     * Handle successful authentication
+     * Gestisce il logout da Cohesion
      */
-    private function handle_successful_authentication() {
-        $profile = $this->cohesion->profile;
-        $username = $this->cohesion->username;
-        
-        if (empty($profile) || empty($username)) {
-            $this->handle_error('Profilo utente non disponibile');
-            return;
+    public function handle_logout() {
+        try {
+            // Avvia la sessione se non già attiva
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            
+            // Includi l'autoloader di Composer
+            require_once plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php';
+            
+            // Inizializza Cohesion2
+            $cohesion = new Cohesion2();
+            
+            // Effettua il logout da WordPress
+            wp_logout();
+            
+            // Effettua il logout da Cohesion (se supportato dalla libreria)
+            if (method_exists($cohesion, 'logout')) {
+                $logout_url = $cohesion->logout(home_url());
+                wp_send_json_success(array('redirect_url' => $logout_url));
+            } else {
+                wp_send_json_success(array('redirect_url' => home_url()));
+            }
+            
+        } catch (Exception $e) {
+            error_log('Cohesion Logout Error: ' . $e->getMessage());
+            wp_send_json_error(array('message' => 'Errore durante il logout: ' . $e->getMessage()));
         }
         
-        // Get or create WordPress user
-        $user_manager = new CohesionUserManager();
-        $user = $user_manager->get_or_create_user($profile, $username);
-        
-        if (is_wp_error($user)) {
-            $this->handle_error('Errore nella creazione dell\'utente: ' . $user->get_error_message());
-            return;
-        }
-        
-        // Log in the user
-        wp_set_current_user($user->ID);
-        wp_set_auth_cookie($user->ID, true);
-        
-        // Mark user as authenticated via Cohesion
-        update_user_meta($user->ID, 'cohesion_authenticated', true);
-        update_user_meta($user->ID, 'cohesion_last_login', current_time('mysql'));
-        update_user_meta($user->ID, 'cohesion_profile', $profile);
-        update_user_meta($user->ID, 'cohesion_sso_id', $this->cohesion->id_sso);
-        
-        // Log the login
-        $this->log_user_login($user, $profile);
-        
-        // Redirect to intended page
-        $redirect_to = isset($_SESSION['cohesion_redirect_after_login']) 
-            ? $_SESSION['cohesion_redirect_after_login'] 
-            : get_option('cohesion_redirect_after_login', home_url());
-        
-        unset($_SESSION['cohesion_redirect_after_login']);
-        
-        wp_redirect($redirect_to);
-        exit;
+        wp_die();
     }
     
     /**
-     * Initiate logout process
+     * Inizia il processo di login (per chiamate dirette URL)
+     */
+    public function initiate_login($redirect_to = null) {
+        try {
+            // Log per debug
+            error_log('Cohesion Login: Starting login process (direct URL)');
+            
+            // Avvia la sessione se non già attiva
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            
+            // Salva l'URL di redirect se fornito
+            if ($redirect_to) {
+                $_SESSION['cohesion_redirect'] = $redirect_to;
+            }
+            
+            // Includi l'autoloader di Composer
+            $autoload_path = plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php';
+            if (!file_exists($autoload_path)) {
+                throw new Exception('Autoloader Composer non trovato: ' . $autoload_path);
+            }
+            require_once $autoload_path;
+            
+            // Verifica che la classe Cohesion2 sia disponibile
+            if (!class_exists('Cohesion2')) {
+                throw new Exception('Classe Cohesion2 non trovata');
+            }
+            
+            // Inizializza Cohesion2
+            $cohesion = new Cohesion2();
+            
+            // Configura i parametri
+            $config = $this->config->get_all_settings();
+            
+            // Configura la libreria Cohesion2
+            if (!empty($config['cohesion_certificate_path'])) {
+                $cohesion->setCertificate($config['cohesion_certificate_path'], $config['cohesion_key_path']);
+            }
+            
+            // Configura SSO e SAML2.0
+            $cohesion->useSSO(true);
+            if ($config['cohesion_use_saml20']) {
+                $cohesion->useSAML20(true);
+            }
+            
+            // Configura restrizioni di autenticazione
+            if (!empty($config['cohesion_auth_restriction'])) {
+                $cohesion->setAuthRestriction($config['cohesion_auth_restriction']);
+            }
+            
+            error_log('Cohesion Login: Config = ' . print_r($config, true));
+            
+            // La libreria Cohesion2 gestisce il redirect automaticamente
+            // Non restituisce un URL ma fa il redirect direttamente
+            $cohesion->auth();
+            
+            // Se arriviamo qui, significa che l'utente è già autenticato
+            // Recupera i dati dell'utente e crea/aggiorna l'account WordPress
+            if ($cohesion->isAuth()) {
+                error_log('Cohesion Login: User authenticated, processing...');
+                
+                // Qui dovremmo recuperare i dati dell'utente e creare/aggiornare l'account
+                // La libreria Cohesion2 dovrebbe fornire i metodi per ottenere i dati dell'utente
+                
+                // Per ora, redirect alla home
+                wp_redirect(home_url());
+                exit;
+            } else {
+                throw new Exception('Autenticazione Cohesion fallita');
+            }
+            
+        } catch (Exception $e) {
+            error_log('Cohesion Login Error: ' . $e->getMessage());
+            error_log('Cohesion Login Stack Trace: ' . $e->getTraceAsString());
+            
+            // Redirect con messaggio di errore
+            $error_url = home_url('?cohesion_error=' . urlencode($e->getMessage()));
+            wp_redirect($error_url);
+            exit;
+        }
+    }
+    
+    /**
+     * Inizia il processo di logout (per chiamate dirette URL)
      */
     public function initiate_logout() {
         try {
-            // Get current user info before logout
-            $user_id = get_current_user_id();
-            $cohesion_auth = get_user_meta($user_id, 'cohesion_authenticated', true);
-            
-            // Store redirect URL
-            $redirect_to = isset($_GET['redirect_to']) ? $_GET['redirect_to'] : get_option('cohesion_redirect_after_logout', home_url());
-            
-            if ($cohesion_auth && is_user_logged_in()) {
-                // User was authenticated via Cohesion, perform Cohesion logout
-                $this->cohesion = new Cohesion2('wordpress_cohesion');
-                $this->configure_cohesion();
-                
-                // Clear WordPress session
-                wp_logout();
-                
-                // Clear Cohesion metadata
-                delete_user_meta($user_id, 'cohesion_authenticated');
-                
-                // Perform Cohesion logout
-                $this->cohesion->logout();
-                
-            } else {
-                // Regular WordPress logout
-                wp_logout();
+            // Avvia la sessione se non già attiva
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
             }
             
-            // Redirect after logout
-            wp_redirect($redirect_to);
+            // Includi l'autoloader di Composer
+            require_once plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php';
+            
+            // Inizializza Cohesion2
+            $cohesion = new Cohesion2();
+            
+            // Effettua il logout da WordPress
+            wp_logout();
+            
+            // Effettua il logout da Cohesion (se supportato dalla libreria)
+            if (method_exists($cohesion, 'logout')) {
+                $logout_url = $cohesion->logout(home_url());
+                wp_redirect($logout_url);
+            } else {
+                wp_redirect(home_url());
+            }
             exit;
             
-        } catch (\Exception $e) {
-            // Fallback: regular WordPress logout
-            wp_logout();
+        } catch (Exception $e) {
+            error_log('Cohesion Logout Error: ' . $e->getMessage());
             wp_redirect(home_url());
             exit;
         }
     }
+
+    /**
+     * Verifica se un utente è autenticato tramite Cohesion
+     */
+    public function is_cohesion_user($user_id = null) {
+        if (!$user_id) {
+            $user_id = get_current_user_id();
+        }
+        
+        return get_user_meta($user_id, 'cohesion_authenticated', true) === 'yes';
+    }
     
     /**
-     * Log user login activity
+     * Ottieni informazioni sull'utente Cohesion
      */
-    private function log_user_login($user, $profile) {
-        $log_data = array(
-            'user_id' => $user->ID,
-            'username' => $user->user_login,
-            'login_time' => current_time('mysql'),
-            'ip_address' => $this->get_user_ip(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-            'cohesion_profile' => $profile,
-            'authentication_type' => isset($profile['tipo_autenticazione']) ? $profile['tipo_autenticazione'] : 'unknown'
+    public function get_cohesion_user_info($user_id = null) {
+        if (!$user_id) {
+            $user_id = get_current_user_id();
+        }
+        
+        return array(
+            'is_cohesion_user' => $this->is_cohesion_user($user_id),
+            'cohesion_id' => get_user_meta($user_id, 'cohesion_user_id', true),
+            'fiscal_code' => get_user_meta($user_id, 'cohesion_fiscal_code', true),
+            'spid_code' => get_user_meta($user_id, 'cohesion_spid_code', true),
+            'last_login' => get_user_meta($user_id, 'cohesion_last_login', true)
         );
-        
-        // Store in WordPress option (you might want to use a custom table for better performance)
-        $existing_logs = get_option('cohesion_login_logs', array());
-        $existing_logs[] = $log_data;
-        
-        // Keep only last 100 logs
-        if (count($existing_logs) > 100) {
-            $existing_logs = array_slice($existing_logs, -100);
-        }
-        
-        update_option('cohesion_login_logs', $existing_logs);
-        
-        // WordPress action for other plugins to hook into
-        do_action('cohesion_user_login', $user, $profile, $log_data);
-    }
-    
-    /**
-     * Get user IP address
-     */
-    private function get_user_ip() {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            return $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            return $_SERVER['REMOTE_ADDR'];
-        }
-    }
-    
-    /**
-     * Handle authentication errors
-     */
-    private function handle_error($message) {
-        // Log error
-        error_log('Cohesion Authentication Error: ' . $message);
-        
-        // Store error in session to display to user
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        $_SESSION['cohesion_error'] = $message;
-        
-        // Redirect to login page with error
-        $login_url = wp_login_url();
-        $login_url = add_query_arg('cohesion_error', '1', $login_url);
-        
-        wp_redirect($login_url);
-        exit;
-    }
-    
-    /**
-     * Display error messages on login page
-     */
-    public static function display_login_errors() {
-        if (isset($_GET['cohesion_error']) && $_GET['cohesion_error'] == '1') {
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            
-            if (isset($_SESSION['cohesion_error'])) {
-                echo '<div id="login_error">' . esc_html($_SESSION['cohesion_error']) . '</div>';
-                unset($_SESSION['cohesion_error']);
-            }
-        }
     }
 }
-
-// Add error display to login page
-add_action('login_head', array('CohesionAuthentication', 'display_login_errors'));

@@ -8,18 +8,21 @@ if (!defined('ABSPATH')) {
  * Cohesion User Manager
  * Handles user creation and management for Cohesion authenticated users
  */
-class CohesionUserManager {
+class Cohesion_User_Manager {
     
     /**
      * Get or create WordPress user from Cohesion profile
      */
-    public function get_or_create_user($profile, $username) {
+    public function create_or_update_user($user_data) {
+        // Extract username from user data
+        $username = $user_data['username'] ?? $user_data['user_login'] ?? '';
+        
         // First, try to find existing user by Cohesion username
-        $existing_user = $this->find_existing_user($profile, $username);
+        $existing_user = $this->find_existing_user($user_data, $username);
         
         if ($existing_user) {
             // Update existing user with latest profile data
-            $this->update_user_profile($existing_user, $profile);
+            $this->update_user_profile($existing_user, $user_data);
             return $existing_user;
         }
         
@@ -29,7 +32,14 @@ class CohesionUserManager {
         }
         
         // Create new user
-        return $this->create_new_user($profile, $username);
+        return $this->create_new_user($user_data, $username);
+    }
+    
+    /**
+     * Get or create WordPress user from Cohesion profile (alias for backward compatibility)
+     */
+    public function get_or_create_user($profile, $username) {
+        return $this->create_or_update_user($profile);
     }
     
     /**

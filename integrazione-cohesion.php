@@ -69,10 +69,10 @@ class CohesionIntegrationPlugin {
         load_plugin_textdomain('integrazione-cohesion', false, dirname(plugin_basename(__FILE__)) . '/languages');
         
         // Initialize components
-        new CohesionIntegration();
+        new Cohesion_Integration();
         
         if (is_admin()) {
-            new CohesionAdmin();
+            new Cohesion_Admin();
         }
     }
     

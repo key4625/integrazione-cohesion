@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
  * Cohesion Configuration Helper
  * Handles the configuration of the ID Sito and other Cohesion-specific settings
  */
-class CohesionConfig {
+class Cohesion_Config {
     
     /**
      * Get the configured ID Sito or fallback to TEST
@@ -195,5 +195,22 @@ class CohesionConfig {
         
         // Validate format (adjust based on actual ID Sito format requirements)
         return preg_match('/^[A-Za-z0-9_-]+$/', $id_sito);
+    }
+    
+    /**
+     * Get all plugin settings
+     */
+    public function get_all_settings() {
+        return array(
+            'cohesion_environment' => get_option('cohesion_environment', 'test'),
+            'cohesion_site_id' => self::getIdSito(),
+            'cohesion_use_saml20' => get_option('cohesion_use_saml20', false),
+            'cohesion_certificate_path' => get_option('cohesion_certificate_path', ''),
+            'cohesion_key_path' => get_option('cohesion_key_path', ''),
+            'cohesion_auth_restriction' => get_option('cohesion_auth_restriction', '0,1,2,3'),
+            'cohesion_auto_create_users' => get_option('cohesion_auto_create_users', true),
+            'cohesion_default_role' => get_option('cohesion_default_role', 'subscriber'),
+            'cohesion_send_welcome_email' => get_option('cohesion_send_welcome_email', false)
+        );
     }
 }

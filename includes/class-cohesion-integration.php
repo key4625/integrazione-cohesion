@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 /**
  * Main integration class for Cohesion authentication
  */
-class CohesionIntegration {
+class Cohesion_Integration {
     
     public function __construct() {
         $this->init_hooks();
@@ -129,7 +129,7 @@ class CohesionIntegration {
      * Handle login request
      */
     private function handle_login() {
-        $auth = new CohesionAuthentication();
+        $auth = new Cohesion_Authentication();
         $auth->initiate_login();
     }
     
@@ -137,7 +137,7 @@ class CohesionIntegration {
      * Handle logout request
      */
     private function handle_logout() {
-        $auth = new CohesionAuthentication();
+        $auth = new Cohesion_Authentication();
         $auth->initiate_logout();
     }
     
@@ -145,7 +145,7 @@ class CohesionIntegration {
      * Handle authentication callback
      */
     private function handle_authentication_callback() {
-        $auth = new CohesionAuthentication();
+        $auth = new Cohesion_Authentication();
         $auth->handle_callback();
     }
     

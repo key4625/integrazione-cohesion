@@ -14,6 +14,18 @@ e questo progetto aderisce al [Semantic Versioning](https://semver.org/spec/v2.0
 - Integrazione con WooCommerce
 - Widget per la sidebar
 
+## [1.0.1] - 2025-07-08
+
+### Fixed
+- Risolto errore PHP Fatal "Class CohesionAuthentication not found"
+- Corretti nomi delle classi per consistenza (underscore vs camelCase)
+- Aggiunti metodi mancanti nella classe Cohesion_Authentication
+- Migliorata gestione di login/logout tramite URL diretti
+
+### Changed
+- Nomenclatura classi standardizzata con underscore
+- Metodi di autenticazione separati per AJAX e URL diretti
+
 ## [1.0.0] - 2025-06-27
 
 ### Aggiunto

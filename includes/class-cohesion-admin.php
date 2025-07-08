@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 /**
  * Cohesion Admin Interface
  */
-class CohesionAdmin {
+class Cohesion_Admin {
     
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
