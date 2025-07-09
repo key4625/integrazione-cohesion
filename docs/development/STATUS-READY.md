@@ -123,7 +123,7 @@ git push origin v1.0.1
 
 ### Per Bug e Feature Request
 - 🐛 **GitHub Issues**: Repository ufficiale
-- 📧 **Email**: info@keysoluzioni.it
+- 📧 **Email**: michele.cappannari@keysoluzioni.it
 
 ### Per Integrazione Cohesion  
 - 🏛️ **Regione Marche**: Documentazione ufficiale e richiesta ID Sito

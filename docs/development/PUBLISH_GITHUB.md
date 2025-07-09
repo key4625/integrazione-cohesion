@@ -130,7 +130,7 @@ git push origin v1.0.1
 ## 📞 Supporto e Contatti
 
 - **Issues GitHub**: Per bug e feature request
-- **Email**: info@keysoluzioni.it
+- **Email**: michele.cappannari@keysoluzioni.it
 - **Documentazione**: README.md e wiki del repository
 
 ---

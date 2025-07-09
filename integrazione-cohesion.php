@@ -19,7 +19,7 @@
  * 
  * @package IntegrazioneCohesion
  * @version 1.0.1
- * @author GitHub Copilot & Michele Cappannari <info@keysoluzioni.it>
+ * @author GitHub Copilot & Michele Cappannari <michele.cappannari@keysoluzioni.it>
  * @copyright 2025 Key Soluzioni Informatiche
  * @license MIT License
  * @link https://github.com/keysoluzioni/integrazione-cohesion-wordpress

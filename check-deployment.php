@@ -24,7 +24,7 @@ echo "<strong>📋 Informazioni Plugin</strong><br>\n";
 echo "🤖 <strong>Sviluppato da:</strong> GitHub Copilot AI Assistant<br>\n";
 echo "👨‍💻 <strong>Testato e perfezionato da:</strong> Ing. Michele Cappannari (Key Soluzioni Informatiche)<br>\n";
 echo "🌐 <strong>Website:</strong> <a href='https://keysoluzioni.it' target='_blank'>keysoluzioni.it</a><br>\n";
-echo "📧 <strong>Supporto:</strong> info@keysoluzioni.it<br>\n";
+echo "📧 <strong>Supporto:</strong> michele.cappannari@keysoluzioni.it<br>\n";
 echo "📅 <strong>Versione:</strong> 1.0.1 (9 Luglio 2025)\n";
 echo "</div>\n";
 echo "<hr>\n";

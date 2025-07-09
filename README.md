@@ -209,7 +209,7 @@ Questo progetto è licenziato sotto **MIT License** - vedi il file [LICENSE](LIC
 - Preparazione per pubblicazione
 
 **Website**: [keysoluzioni.it](https://keysoluzioni.it)  
-**Email**: info@keysoluzioni.it
+**Email**: michele.cappannari@keysoluzioni.it
 
 ### 🏛️ Sistema Cohesion
 **Regione Marche**
@@ -221,7 +221,7 @@ Questo progetto è licenziato sotto **MIT License** - vedi il file [LICENSE](LIC
 
 ### Supporto Tecnico
 - **Issues GitHub**: [Apri un issue](https://github.com/keysoluzioni/integrazione-cohesion-wordpress/issues)
-- **Email**: info@keysoluzioni.it
+- **Email**: michele.cappannari@keysoluzioni.it
 - **Documentazione**: Consulta file `TROUBLESHOOTING.md`
 
 ### Supporto Cohesion

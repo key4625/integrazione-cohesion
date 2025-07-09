@@ -85,7 +85,7 @@ Questo plugin rappresenta un esempio di **collaborazione efficace tra AI e svilu
 ### Per il Plugin
 - **Repository**: https://github.com/keysoluzioni/integrazione-cohesion-wordpress
 - **Issues**: GitHub Issues per bug report e feature request
-- **Email**: info@keysoluzioni.it
+- **Email**: michele.cappannari@keysoluzioni.it
 
 ### Per Cohesion Regione Marche
 - **Documentazione**: Portale ufficiale Regione Marche

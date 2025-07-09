@@ -27,7 +27,7 @@
 ### Ing. Michele Cappannari
 **Azienda**: Key Soluzioni Informatiche  
 **Ruolo**: Senior Developer & Project Lead  
-**Email**: info@keysoluzioni.it  
+**Email**: michele.cappannari@keysoluzioni.it  
 **Website**: [keysoluzioni.it](https://keysoluzioni.it)
 
 **Contributi Principali**:
@@ -145,7 +145,7 @@ Per aver fornito un AI assistant così potente da permettere lo sviluppo complet
 ## 📞 Contatti
 
 ### Supporto Tecnico
-- **Email**: info@keysoluzioni.it
+- **Email**: michele.cappannari@keysoluzioni.it
 - **GitHub Issues**: [Report Bug/Feature Request](https://github.com/keysoluzioni/integrazione-cohesion-wordpress/issues)
 - **Website**: [Key Soluzioni Informatiche](https://keysoluzioni.it)
 

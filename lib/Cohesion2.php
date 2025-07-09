@@ -20,7 +20,7 @@
  * - Libreria originale: Andrea Vallorani
  * - Modifiche WordPress: GitHub Copilot & Michele Cappannari (Key Soluzioni Informatiche)
  * - Azienda: Key Soluzioni Informatiche (https://keysoluzioni.it)
- * - Email supporto: info@keysoluzioni.it
+ * - Email supporto: michele.cappannari@keysoluzioni.it
  */
 class Cohesion2{
     

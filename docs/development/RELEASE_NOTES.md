@@ -158,7 +158,7 @@ Prima release del plugin WordPress per integrazione Cohesion Regione Marche.
 ### Support Channels
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/keysoluzioni/integrazione-cohesion-wordpress/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/keysoluzioni/integrazione-cohesion-wordpress/discussions)
-- 📧 **Professional Support**: info@keysoluzioni.it
+- 📧 **Professional Support**: michele.cappannari@keysoluzioni.it
 
 ### Useful Links
 - 🏛️ **Cohesion Regione Marche**: http://cohesion.regione.marche.it/
