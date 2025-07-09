@@ -1,12 +1,12 @@
-# Contribuire al Plugin Integrazione Cohesion
+# 🤝 Contribuire al Plugin Integrazione Cohesion
 
-Grazie per il tuo interesse nel contribuire al plugin! Questo documento fornisce le linee guida per contribuire al progetto.
+Grazie per il tuo interesse nel contribuire al plugin! Questo documento fornisce le linee guida per contribuire efficacemente al progetto sviluppato con **GitHub Copilot** e perfezionato da **Key Soluzioni Informatiche**.
 
-## 🚀 Come contribuire
+## 🎯 Come Contribuire
 
-### Segnalazione di bug
+### Segnalazione Bug
 
-1. Verifica che il bug non sia già stato segnalato nelle [Issues](https://github.com/your-username/integrazione-cohesion/issues)
+1. Verifica che il bug non sia già stato segnalato nelle [Issues](https://github.com/keysoluzioni/integrazione-cohesion-wordpress/issues)
 2. Crea una nuova issue utilizzando il template "Bug Report"
 3. Fornisci informazioni dettagliate per riprodurre il problema
 4. Includi versioni di WordPress, PHP e plugin

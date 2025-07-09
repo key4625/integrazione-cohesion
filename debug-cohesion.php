@@ -62,25 +62,25 @@ function debug_output($title, $data) {
     
     // Test 2: Verifica file e percorsi
     $plugin_dir = plugin_dir_path(__FILE__);
-    $autoload_path = $plugin_dir . 'vendor/autoload.php';
+    $library_path = $plugin_dir . 'lib/Cohesion2.php';
     
     debug_output("2. File e Percorsi", array(
         'Plugin Directory' => $plugin_dir,
-        'Autoload Path' => $autoload_path,
-        'Autoload Exists' => file_exists($autoload_path) ? 'SÌ' : 'NO',
-        'Vendor Directory' => is_dir($plugin_dir . 'vendor') ? 'SÌ' : 'NO',
-        'Cohesion2 Library' => is_dir($plugin_dir . 'vendor/andreaval/cohesion2-library') ? 'SÌ' : 'NO'
+        'Library Path' => $library_path,
+        'Library Exists' => file_exists($library_path) ? 'SÌ' : 'NO',
+        'Lib Directory' => is_dir($plugin_dir . 'lib') ? 'SÌ' : 'NO',
+        'Local Cohesion2' => file_exists($library_path) ? 'SÌ' : 'NO'
     ));
     
-    // Test 3: Verifica autoloader e classe
-    echo "<h3>3. Test Autoloader e Classe</h3>";
+    // Test 3: Verifica libreria locale e classe
+    echo "<h3>3. Test Libreria Locale e Classe</h3>";
     
-    if (file_exists($autoload_path)) {
-        echo "<p class='success'>✓ Autoloader trovato</p>";
+    if (file_exists($library_path)) {
+        echo "<p class='success'>✓ Libreria locale trovata</p>";
         
         try {
-            require_once $autoload_path;
-            echo "<p class='success'>✓ Autoloader caricato</p>";
+            require_once $library_path;
+            echo "<p class='success'>✓ Libreria locale caricata</p>";
             
             if (class_exists('Cohesion2')) {
                 echo "<p class='success'>✓ Classe Cohesion2 disponibile</p>";
@@ -88,6 +88,12 @@ function debug_output($title, $data) {
                 try {
                     $cohesion = new Cohesion2();
                     echo "<p class='success'>✓ Istanza Cohesion2 creata</p>";
+                    
+                    // Test configurazione ID Sito
+                    if (method_exists($cohesion, 'setIdSito')) {
+                        echo "<p class='success'>✓ Metodo setIdSito() disponibile</p>";
+                        $cohesion->setIdSito('TEST_' . time());
+                    }
                     
                     // Verifica metodi disponibili
                     $methods = get_class_methods($cohesion);
@@ -102,10 +108,11 @@ function debug_output($title, $data) {
             }
             
         } catch (Exception $e) {
-            echo "<p class='error'>✗ Errore caricamento autoloader: " . $e->getMessage() . "</p>";
+            echo "<p class='error'>✗ Errore caricamento libreria: " . $e->getMessage() . "</p>";
         }
     } else {
-        echo "<p class='error'>✗ Autoloader non trovato</p>";
+        echo "<p class='error'>✗ Libreria locale Cohesion2.php non trovata</p>";
+        echo "<p>La libreria dovrebbe essere in: " . $library_path . "</p>";
     }
     
     // Test 4: Verifica configurazione plugin

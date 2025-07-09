@@ -130,7 +130,10 @@ class Cohesion_Integration {
      */
     private function handle_login() {
         $auth = new Cohesion_Authentication();
-        $auth->initiate_login();
+        
+        // Passa il parametro redirect_to se presente
+        $redirect_to = isset($_GET['redirect_to']) ? $_GET['redirect_to'] : null;
+        $auth->initiate_login($redirect_to);
     }
     
     /**

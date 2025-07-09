@@ -1,0 +1,24 @@
+            // Configura la libreria Cohesion2 per SPID/CIE
+            // Abilita SAML 2.0 per supporto SPID/CIE per impostazione predefinita
+            $cohesion->useSAML20(true);
+            
+            // Configura certificati se forniti dalle impostazioni
+            if (!empty($config['cohesion_certificate_path']) && !empty($config['cohesion_key_path'])) {
+                $cohesion->setCertificate($config['cohesion_certificate_path'], $config['cohesion_key_path']);
+            } else {
+                // Usa i certificati di default della libreria per test
+                $cert_path = plugin_dir_path(dirname(__FILE__)) . 'vendor/andreaval/cohesion2-library/cohesion2/cert/';
+                if (file_exists($cert_path . 'cohesion2.crt.pem') && file_exists($cert_path . 'cohesion2.key.pem')) {
+                    $cohesion->setCertificate($cert_path . 'cohesion2.crt.pem', $cert_path . 'cohesion2.key.pem');
+                }
+            }
+            
+            // Configura SSO
+            $cohesion->useSSO(true);
+            
+            // Configura restrizioni di autenticazione (0 = tutti i metodi incluso SPID/CIE)
+            $auth_restriction = $config['cohesion_auth_restriction'] ?? '0';
+            $cohesion->setAuthRestriction($auth_restriction);
+            
+            error_log('Cohesion Login: Config = ' . print_r($config, true));
+            error_log('Cohesion Login: SAML20 enabled, SSO enabled, Auth restriction: ' . $auth_restriction);

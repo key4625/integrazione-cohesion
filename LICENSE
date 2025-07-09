@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Regione Marche - Sistema Cohesion
+Copyright (c) 2025 Key Soluzioni Informatiche & GitHub Copilot
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,22 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+ADDITIONAL CREDITS:
+
+Cohesion2 PHP Library:
+- Original author: Andrea Vallorani
+- Modified for WordPress Plugin by: GitHub Copilot & Michele Cappannari
+- License: MIT License
+- Repository: https://github.com/andreaval/Cohesion2PHPLibrary
+
+Cohesion Authentication System:
+- Provider: Regione Marche (Regional Government of Marche, Italy)
+- Documentation: http://cohesion.regione.marche.it/
+
+WordPress Integration:
+- Initial development: GitHub Copilot AI Assistant
+- Testing and debugging: Ing. Michele Cappannari (Key Soluzioni Informatiche)
+- Company website: https://keysoluzioni.it

@@ -5,6 +5,32 @@ Tutte le modifiche notevoli a questo progetto saranno documentate in questo file
 Il formato è basato su [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e questo progetto aderisce al [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-07-09
+
+### 🔧 Fixed
+- **REDIRECT ISSUE RISOLTO**: Corretto problema che mostrava URL interno `/cohesion/login` invece di redirigere al portale Cohesion esterno
+- **Output Buffering**: Aggiunta pulizia output buffer prima dei redirect per evitare conflitti con WordPress  
+- **Gestione redirect_to**: Migliorata gestione del parametro redirect_to nelle sessioni
+- **Callback robusto**: Potenziata gestione del callback di ritorno da Cohesion con controlli aggiuntivi
+- **ID Sito configurabile**: Verificato supporto completo per ID Sito reali (non solo TEST)
+
+### 🚀 Improved
+- Aggiunti log dettagliati per debug del flusso di autenticazione
+- Migliorata configurazione SAML 2.0 per SPID/CIE con ID Sito reali
+- Gestione errori più robusta nel flusso di login/callback
+- Verifica presenza parametri callback prima dell'elaborazione
+
+### 📋 Technical Changes
+- `initiate_login()`: Aggiunta pulizia output buffer e gestione redirect_to
+- `handle_callback()`: Migliorata gestione callback con controlli aggiuntivi  
+- `handle_login()`: Supporto per parametro redirect_to dalla query string
+- Configurazione Cohesion2: Verificata compatibilità con ID Sito reali
+
+### 🧪 Testing
+- Creati script di test per verifica redirect (`test-finale.php`, `test-redirect-login.php`)
+- Script di aggiornamento configurazione (`update-config.php`)
+- Verifica deployment aggiornata (`check-deployment.php`)
+
 ## [Unreleased]
 
 ### Pianificato
@@ -13,6 +39,36 @@ e questo progetto aderisce al [Semantic Versioning](https://semver.org/spec/v2.0
 - Export dei dati utenti in CSV
 - Integrazione con WooCommerce
 - Widget per la sidebar
+
+## [1.1.0] - 2025-07-09 - Migrazione Libreria Locale
+
+### 🚀 Miglioramenti Principali
+- **BREAKING CHANGE**: Rimossa dipendenza da Composer
+- Creata libreria Cohesion2 locale in `lib/Cohesion2.php`
+- ID Sito ora completamente configurabile tramite `setIdSito()`
+- Rimozione dell'hardcoded "TEST" che impediva SPID/CIE
+
+### ✅ Modifiche Tecniche
+- Rimossi `composer.json`, `composer.lock` e cartella `vendor/`
+- Aggiornato caricamento libreria in tutte le classi
+- Modificata classe `Cohesion_Config` per controllo libreria locale
+- Aggiornati messaggi di errore per riflettere nuova architettura
+
+### 📚 Documentazione
+- Aggiornato `TROUBLESHOOTING.md` con nuove procedure
+- Aggiornato `STATUS.md` con stato attuale
+- Creato script `debug-libreria-locale.php` per test
+
+### 🎯 Benefici
+- Installazione semplificata (nessun comando Composer)
+- Libreria modificabile direttamente se necessario
+- Controllo completo su versione e funzionalità
+- Deploy immediato senza dipendenze esterne
+
+### ⚠️ Note di Migrazione
+- Non serve più eseguire `composer install`
+- La libreria è ora autocontenuta nel plugin
+- L'ID Sito "TEST" mostrava solo user/pass, ora configurabile per SPID/CIE
 
 ## [1.0.1] - 2025-07-08
 

@@ -129,15 +129,9 @@ class Cohesion_Config {
      * Check if Cohesion library is available
      */
     public static function isCohesionLibraryAvailable() {
-        // Check if autoloader is available
-        if (file_exists(COHESION_PLUGIN_PATH . 'vendor/autoload.php')) {
-            require_once COHESION_PLUGIN_PATH . 'vendor/autoload.php';
-            return class_exists('Cohesion2');
-        }
-        
-        // Check if manual installation is available
-        if (file_exists(COHESION_PLUGIN_PATH . 'lib/cohesion2/Cohesion2.php')) {
-            require_once COHESION_PLUGIN_PATH . 'lib/cohesion2/Cohesion2.php';
+        // Check if local library is available
+        if (file_exists(COHESION_PLUGIN_PATH . 'lib/Cohesion2.php')) {
+            require_once COHESION_PLUGIN_PATH . 'lib/Cohesion2.php';
             return class_exists('Cohesion2');
         }
         
@@ -204,10 +198,10 @@ class Cohesion_Config {
         return array(
             'cohesion_environment' => get_option('cohesion_environment', 'test'),
             'cohesion_site_id' => self::getIdSito(),
-            'cohesion_use_saml20' => get_option('cohesion_use_saml20', false),
+            'cohesion_use_saml20' => get_option('cohesion_use_saml20', true), // Abilitato per default per SPID/CIE
             'cohesion_certificate_path' => get_option('cohesion_certificate_path', ''),
             'cohesion_key_path' => get_option('cohesion_key_path', ''),
-            'cohesion_auth_restriction' => get_option('cohesion_auth_restriction', '0,1,2,3'),
+            'cohesion_auth_restriction' => get_option('cohesion_auth_restriction', '0'), // 0 = tutti i metodi
             'cohesion_auto_create_users' => get_option('cohesion_auto_create_users', true),
             'cohesion_default_role' => get_option('cohesion_default_role', 'subscriber'),
             'cohesion_send_welcome_email' => get_option('cohesion_send_welcome_email', false)
