@@ -74,6 +74,7 @@ coverage/
 # Backup Files
 *.bak
 *.backup
+backup_*/
 
 # Archive Files
 *.zip
