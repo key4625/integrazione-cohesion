@@ -302,8 +302,9 @@ class Cohesion_Integration {
         ?>
         <style>
         .cohesion-login-section {
+            text-align: center;
             margin: 20px 0;
-            padding: 20px;
+            padding: 20px !important;
             border: 1px solid #ddd;
             border-radius: 5px;
             background: #f9f9f9;
@@ -311,13 +312,13 @@ class Cohesion_Integration {
         .cohesion-login-button {
             background: #0073aa;
             color: white;
-            padding: 12px 24px;
+            padding: 12px 24px !important;
             text-decoration: none;
             border-radius: 5px;
             display: inline-block;
             width: 100%;
             text-align: center;
-            margin-bottom: 15px;
+            margin: 15px 0px !important;
             box-sizing: border-box;
         }
         .cohesion-login-button:hover {
